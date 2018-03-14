@@ -1,10 +1,10 @@
 file_backup
 ===========
 
-`file_backup` script is used to copy a file into a git repository, commit and
-push (if the remote exist).
-The first argument to give to the script is the file to back up and the second
-argument is the git (bare) repository.
+`file_backup` script copies the given file when it changes in a git repository,
+commits and pushes (if the remote is on).
+The script expects as arguments the file to back up and the git (bare)
+repository.
 
 This script depends on: sh, date, git, and inotifywait.
 
