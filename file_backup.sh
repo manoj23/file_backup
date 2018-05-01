@@ -1,5 +1,23 @@
 #!/bin/sh
 
+monitor_file()
+{
+	inotifywait -q -m -e attrib,delete_self,close_write --format %e $file_path |
+	while read events; do
+		echo $events
+		cp -p $file_path $git_repo_path
+		(cd $git_repo_path && \
+			git add $file_name && \
+			git commit -m "$file_commit_message" && \
+			[ "x$is_remote_present" == "xyes" ] && git push)
+
+		if [ "x$events" == "xDELETE_SELF" ]; then
+			killall -15 inotifywait
+			monitor_file
+		fi
+	done
+}
+
 file_backup()
 {
 	file_path=$1
@@ -17,12 +35,5 @@ file_backup()
 		is_remote_present="yes"
 	fi
 
-	inotifywait -q -m -e close_write --format %e $file_path |
-	while read events; do
-		cp -p $file_path $git_repo_path
-		(cd $git_repo_path && \
-			git add $file_name && \
-			git commit -m "$file_commit_message" && \
-			[ "x$is_remote_present" == "xyes" ] && git push)
-	done
+	monitor_file
 }
