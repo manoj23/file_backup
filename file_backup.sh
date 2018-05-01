@@ -2,11 +2,11 @@
 
 file_backup()
 {
-	local file_path=$1
-	local git_repo_path=$2
-	local file_name=$(basename $file_path)
-	local file_commit_message="$file_name: $(date --iso-8601)"
-	local is_remote_present="no" # by default: we consider there is no remote
+	file_path=$1
+	git_repo_path=$2
+	file_name=$(basename $file_path)
+	file_commit_message="$file_name: $(date --iso-8601)"
+	is_remote_present="no" # by default: we consider there is no remote
 
 	[ ! -f "$file_path" ] && echo "$file_path file does not exist" && exit 1
 	[ ! -d "$git_repo_path" ] && echo "$git_repo_path directory does not exist" && exit 2
