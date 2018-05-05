@@ -8,7 +8,7 @@ monitor_file()
 		cp -p $file_path $git_repo_path
 		(cd $git_repo_path && \
 			git add $file_name && \
-			git commit -m "$file_commit_message" && \
+			git commit -m "$file_name: $(date --iso-8601)" && \
 			[ "x$is_remote_present" == "xyes" ] && git push)
 
 		if [ "x$events" == "xDELETE_SELF" ]; then
@@ -23,7 +23,6 @@ file_backup()
 	file_path=$1
 	git_repo_path=$2
 	file_name=$(basename $file_path)
-	file_commit_message="$file_name: $(date --iso-8601)"
 	is_remote_present="no" # by default: we consider there is no remote
 
 	[ ! -f "$file_path" ] && echo "$file_path file does not exist" && exit 1
