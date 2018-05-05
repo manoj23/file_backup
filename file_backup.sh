@@ -3,7 +3,7 @@
 monitor_file()
 {
 	inotifywait -q -m -e attrib,delete_self,close_write --format %e "$file_path" |
-	while read events; do
+	while read -r events; do
 		echo "$events"
 		cp -p "$file_path" "$git_repo_path"
 		(cd "$git_repo_path" && \
