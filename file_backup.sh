@@ -13,7 +13,7 @@ monitor_file()
 
 		if [ "x$events" = "xDELETE_SELF" ]; then
 			killall -15 inotifywait
-			monitor_file
+			break
 		fi
 	done
 }
@@ -34,5 +34,7 @@ file_backup()
 		is_remote_present="yes"
 	fi
 
-	monitor_file
+	while :; do
+		monitor_file
+	done
 }
