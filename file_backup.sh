@@ -1,15 +1,21 @@
 #!/bin/sh
 
+commit_file()
+{
+	cp -p "$file_path" "$git_repo_path"
+	(cd "$git_repo_path" && \
+		git add "$file_name" && \
+		git commit -m "$file_name: $(date --iso-8601)" && \
+		[ "x$is_remote_present" = "xyes" ] && git push)
+}
+
 monitor_file()
 {
 	inotifywait -q -m -e attrib,delete_self,close_write --format %e "$file_path" |
 	while read -r events; do
 		echo "$events"
-		cp -p "$file_path" "$git_repo_path"
-		(cd "$git_repo_path" && \
-			git add "$file_name" && \
-			git commit -m "$file_name: $(date --iso-8601)" && \
-			[ "x$is_remote_present" = "xyes" ] && git push)
+
+		commit_file
 
 		if [ "x$events" = "xDELETE_SELF" ]; then
 			killall -15 inotifywait
@@ -40,6 +46,7 @@ file_backup()
 			sleep 5;
 		done
 
+		commit_file
 		monitor_file
 	done
 }
