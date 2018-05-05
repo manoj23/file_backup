@@ -35,6 +35,11 @@ file_backup()
 	fi
 
 	while :; do
+		while [ ! -f "$file_path" ]; do
+			echo "$file_path does not exist, sleeping..."
+			sleep 5;
+		done
+
 		monitor_file
 	done
 }
