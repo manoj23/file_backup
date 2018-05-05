@@ -9,9 +9,9 @@ monitor_file()
 		(cd "$git_repo_path" && \
 			git add "$file_name" && \
 			git commit -m "$file_name: $(date --iso-8601)" && \
-			[ "x$is_remote_present" == "xyes" ] && git push)
+			[ "x$is_remote_present" = "xyes" ] && git push)
 
-		if [ "x$events" == "xDELETE_SELF" ]; then
+		if [ "x$events" = "xDELETE_SELF" ]; then
 			killall -15 inotifywait
 			monitor_file
 		fi
